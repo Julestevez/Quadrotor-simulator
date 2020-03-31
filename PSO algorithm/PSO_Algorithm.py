@@ -1,91 +1,109 @@
-import numpy as np
-
-#PSO ALGORITHM
-#Quiero comprobar si encuentra el punto más bajo de una U
-#**********************************************
-N=10 #number of particles in the swarm
-weight=1 #weight of the PSO algorithm #antes ponÃ­a 0.9. Si este valor sube mucho, Kd se vuelve grande y el sistema diverge
-const_c1=2 #constant of the velocity algorithm. El valor inicial es 2
-const_c2=2 #constant of the velocity algorithm. El valor inicial es 2
-Number_Iter=300 #number of iterations
-dim=1 #nÃºmero de dimensiÃ³n. Significa el nÃºmero de variables Kp, Ki, Kd
-
-#Initialize the parameter
-fitness=np.zeros((N,Number_Iter))
-R1=np.random.rand(dim,N) #Random numbers [0 1]
-R2=np.random.rand(dim,N) #Random numbers [0 1]
-current_fitness=np.zeros(N) #la current fitness va a ser el overshot
-
-#initializing swarm and velocities and position
-current_position=2*np.random.rand(dim,N)# voy a multiplicar por 1 en lugar de por 10
-velocity=3*np.random.rand(dim,N)
-local_best_position = current_position
-global_best_position = np.zeros((dim,N)) #ESTO ES NUEVO
+#PSO smart code
+import random
+import math
+import matplotlib.pyplot as plt
 
 
-#evaluate initial population
+def objective_function(x):
+    y=3*(1-x[0])**2*math.exp(-x[0]**2-(x[1]+1)**2) - 10*(x[0]/5 - x[0]**3 - x[1]**5)*math.exp(-x[0]**2 - x[1]**2)-1/3*math.exp(-(x[0]+1)**2-x[1]**2)
+    return y
 
-#tengo que calcular el overshot con Kp, Ki, Kd distintos
-x1=current_position
-y=x1**2 #forma de la parabola
-        
+bounds=[(-3,3),(-3,3)]          #upper and lower bounds of variables
+nv=2                            #number of variables
+mm=1
 
-current_fitness=y;#lo que quiero optimizar es que la funciÃ³n me halle el punto mÃ¡s bajo
-print(current_fitness)
+#parameters of PSO algorithm
+particle_size=100               #number of particles
+iterations=500                  #max number of iterations
+w=0.95                          #inertia constant
+c1=2                            #cognative constant
+c2=2                            #social constant
+#end of parameters
 
+class Particle:
+    def __init__(self,bounds):
+        self.particle_position=[]               #particle position
+        self.particle_velocity=[]               #particle velocity
+        self.local_best_particle_position=[]    #best position of the particle
+        self.fitness_local_best_particle_position = initial_fitness #initial objecdtive functdion value of the best parameter
+        self.fitness_particle_position= initial_fitness
 
-local_best_fitness = current_fitness
-global_best_fitness=np.amin(local_best_fitness)
+        for i in range(nv):
+            self.particle_position.append(random.uniform(bounds[i][0],bounds[i][1])) #generate random initial postion
+            self.particle_velocity.append(random.uniform(-1,1))     #generate random initial velocity
 
-for i in range(N):
-    #aquÃ­ elijo cuÃ¡l es la posiciÃ³n con el mejor valor de overshot
+    def evaluate(self,objective_function):
+        self.fitness_particle_position=objective_function(self.particle_position)
+        if mm== -1:
+            if self.fitness_particle_position < self.fitness_local_best_particle_position:
+                self.local_best_particle_position=self.particle_position    #update the local best
+                self.fitness_local_best_particle_position=self.fitness_particle_position    #update the fitness of the best particle
+        if mm==1:
+            if self.fitness_particle_position > self.fitness_local_best_particle_position:
+                self.local_best_particle_position=self.particle_position     #update the local best
+                self.fitness_local_best_particle_position=self.fitness_particle_position    #update the fitness of the 
+
+    def update_velocity(self,global_best_particle_position):
+        for i in range(nv):
+            r1=random.random()
+            r2=random.random()
+
+            cognitive_velocity = c1*r1*(self.local_best_particle_position[i]-self.particle_position[i])
+            social_velocity = c2*r2*(global_best_particle_position[i] - self.particle_position[i])
+            self.particle_velocity[i] = w*self.particle_velocity[i] + cognitive_velocity + social_velocity
+
     
-    #g=np.where(current_fitness==np.argmin(current_fitness))
-    g=np.argmin(current_fitness) #devuelve el índice del valor mínimo
-    global_best_position[:,i]=local_best_position[:,g]
-    #estoy haciendo que la global_best_position tenga todos los Kp, Ki, Kd que genera el menor overshot
+    def update_position(self,bounds):
+        for i in range(nv):
+            self.particle_position[i]=self.particle_position[i]+self.particle_velocity[i]
 
-    
-#velocity update
-velocity = weight*velocity + const_c1*(R1*(local_best_position-current_position)) + const_c2*(R2*(global_best_position - current_position));
+            #check and repair to satisfy the upper bounds
+            if self.particle_position[i]>bounds[i][1]:
+                self.particle_position[i]=bounds[i][1]
+            #check and repair to satisfy the lower bounds
+            if self.particle_position[i]<bounds[i][0]:
+                self.particle_position[i]=bounds[i][0]
 
-#swarm update
-current_position = current_position + velocity
 
-#evaluate a new swarm
-iter=0; #iterations counter
-#
-while(iter <= Number_Iter):
-    iter = iter + 1
-       
-    x1=current_position
-    y= x1**2
-                  
-    current_fitness=y
-    print(iter); print(i)
-            
+class PSO():
+    def __init__(self,objective_function,bounds,particle_size,iterations):
 
-for var in range (N):
-    if current_fitness[var] < local_best_fitness[var]:
-        local_best_fitness[var] = current_fitness[var]
-        local_best_position[var] = current_position[var]
-       
+        fitness_global_best_particle_position=initial_fitness
+        global_best_particle_position=[]
 
-   
-    current_glob_bestfitness = min(local_best_fitness)
-  
-    if (current_glob_bestfitness < global_best_fitness):
-        global_best_fitness = current_glob_bestfitness
-      
-        for var2 in range(N):
-             #aquÃ­ elijo cuÃ¡l es la posiciÃ³n con el mejor valor de overshot
-             g=find(current_fitness==min(current_fitness))
-             global_best_position[var2]=local_best_position[g]
-            #estoy haciendo que la global_best_position tenga todos los Kp, Ki, Kd que genera el menor overshot   
-     
-    
-    velocity = weight * velocity + const_c1*(R1(local_best_position - current_position)) + const_c2*(R2(global_best_position - current_position));
-   
-    current_position = current_position + velocity
-    plot(x1,y,'or')
-    y1=min(y)
+        swarm_particle=[]
+        for i in range(particle_size):
+            swarm_particle.append(Particle(bounds))
+        A=[]
+
+        for i in range(iterations):
+            for j in range(particle_size):
+                swarm_particle[j].evaluate(objective_function)
+
+                if mm == -1:
+                    if swarm_particle[j].fitness_particle_position < fitness_global_best_particle_position:
+                        global_best_particle_position = list(swarm_particle[j].particle_position)
+                        fitness_global_best_particle_position=float(swarm_particle[j].fitness_particle_position)
+
+                if mm == 1:
+                    if swarm_particle[j].fitness_particle_position > fitness_global_best_particle_position:
+                        global_best_particle_position = list(swarm_particle[j].particle_position)
+                        fitness_global_best_particle_position=float(swarm_particle[j].fitness_particle_position)
+            for j in range(particle_size):
+                swarm_particle[j].update_velocity(global_best_particle_position)
+                swarm_particle[j].update_position(bounds)
+
+            A.append(fitness_global_best_particle_position) #record the best fitness
+
+        print('Optimal solution:',global_best_particle_position)
+        print('Objective function value:', fitness_global_best_particle_position)
+        print('Evolutionary process of the objective function value:')
+        plt.plot(A)
+
+if mm == -1:
+    initial_fitness = float("inf")        
+if mm == 1:
+    initial_fitness = -float("inf")
+
+#MainPSO
+PSO(objective_function,bounds,particle_size,iterations)    
