@@ -1,3 +1,4 @@
+#THIS CODE IS A SINGLE FILE, BY WHICH SIMPLIFIED EQUATIONS WE CAN GET THE HORIZONTAL MOTION CONTROL OF A SINGLE QUADROTOR
 #main file
 
 #This code gets a equiload situation of equilibrium, by the descend of
