@@ -1,0 +1,109 @@
+#main file
+
+#This code gets a equiload situation of equilibrium, by the descend of
+# a quadrtor to the equilibrium point between two catenaries.
+
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+
+from mpmath import *
+from Quadrotor import quadrotor
+from Quadrotor import angle_objective
+from Quadrotor import OuterLoopAdaptiveController
+from Quadrotor import EulerIntegration
+
+
+#***Dynamic parameters of DRONE****
+L=25 
+b = 1e-5 
+I = np.diag([5e-7, 5e-7, 10e-7]) 
+k=3e-5
+m=0.5
+kd=0.25
+g=9.80
+
+
+#inicialization of variables
+N=500
+Torque=[0]*4
+Thrust=5
+dt=0.1
+
+Kxd1, Kxp1 = 0.76, 0.22
+Kyd1, Kyp1 = 0.76, 0.22
+Kp, Ki, Kd = 4.05, 0, 20.64
+x_pos_desired, y_pos_desired = 150, 0
+#x_vel_desired = (x_pos_desired - x_pos)/(10*dt)
+#x_accel_desired = (x_pos_desired-x_pos)/(100*dt*dt)
+
+#y_pos_desired = 0
+#y_vel_desired = (y_pos_desired - y)/(10*dt)
+#y_accel_desired = (y_pos_desired-y)/(100*dt*dt)
+
+#Ux_dcha=[]*N
+#a=[]*N
+
+Kd1, Kp1=1, 0.8
+
+#State space representation: [theta     phi     gamma 
+                            #theta_dot phi_dot gamma_dot 
+                            # x         y        z 
+                            # x_dot     y_dot   z_dot]
+States= [0]*12
+
+#Desired states representation: [x_pos_d, x_vel_d, x_accel_d, 
+                                # y_pos_d, y_vel_d, y_accel_d, 
+                                # z_pos_d, theta_d, phi_d, psi_d, height_desired]
+S_desired = [0]*10
+
+
+
+for j in range(N):
+            
+    #theta_objective[j]=0.2
+    
+    x_vel_desired = (x_pos_desired - States[6])/(50*dt)
+    x_accel_desired = (x_pos_desired - States[6])/(100*dt*dt)
+    y_vel_desired = (y_pos_desired - States[7])/(50*dt)
+    y_accel_desired = (y_pos_desired - States[7])/(100*dt*dt)
+
+
+
+    S_desired[0], S_desired[1], S_desired[2] = x_pos_desired,x_vel_desired,x_accel_desired
+    
+    #ANGLE OBJECTIVE
+    #Theta
+    S_desired[6] = angle_objective(S_desired[0:3],States[6],States[9],States[0],Thrust,Kxp1,Kxd1)
+    
+    #Phi
+    #S_desired[7] = angle_objective(S_desired[3:7],States[7],States[10],States[1],Thrust[j-1],Kyp1,Kyd1)
+    
+    #DRONE height position, velocity and acceleration
+    #OBTAINING OF THE STATES OF THE QUADROTOR
+    States[0:6], Thrust_calc, z_accel, x_accel= quadrotor(States,S_desired[6:11],Thrust)
+    
+    if Thrust_calc-Thrust>0.05:
+        Thrust=Thrust_calc+0.05
+    elif Thrust-Thrust_calc>0.05:
+        Thrust=Thrust_calc-0.05
+                
+
+    #OBTAINTION OF FUZZY Kp-Kd
+    Kxp1,Kxd1 = OuterLoopAdaptiveController(S_desired[5],States[0],Kxp1,Kxd1) #X Address
+    #Kyp,Kyd = (S_desired[6],States[1],Kyp,Kyd) #Y Address
+
+    #OBTAINTION OF X_POS AND X_VEL
+    States[9],States[6]= EulerIntegration(x_accel,States[9],States[6])
+    plt.plot(j,States[6],'or') #graphic of x_pos vs time [j = =0.1s]
+plt.show()
+
+"""
+    plt.subplot(3, 1, 1)
+    plt.plot(j,x_accel[j],'or') #plot of the drone height vs time
+    plt.subplot(3,1,2)
+    plt.plot(j,x_vel[j],'ob')
+    plt.subplot(3,1,3)
+    plt.plot(j,x_pos[j],'og')
+    plt.pause(0.1)
+plt.show()"""
