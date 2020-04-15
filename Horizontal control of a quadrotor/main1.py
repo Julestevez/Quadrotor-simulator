@@ -1,7 +1,5 @@
 #main file
-
-#This code gets a equiload situation of equilibrium, by the descend of
-# a quadrtor to the equilibrium point between two catenaries.
+#This code represents the control of a single quadrotor in a horizontal motion in X-Y directions
 
 import numpy as np
 import math
@@ -25,7 +23,7 @@ g=9.80
 
 
 #inicialization of variables
-N=500
+N=200
 Torque=[0]*4
 Thrust=5
 dt=0.1
@@ -33,7 +31,10 @@ dt=0.1
 Kxd1, Kxp1 = 0.76, 0.22
 Kyd1, Kyp1 = 0.76, 0.22
 Kp, Ki, Kd = 4.05, 0, 20.64
-x_pos_desired, y_pos_desired = 150, 0
+#x_pos_desired = np.linspace(0,200,N) 
+x_pos_desired = [100]*N
+x_pos_desired[0:180] = np.linspace(0,100,180)
+y_pos_desired = [0]*N
 #x_vel_desired = (x_pos_desired - x_pos)/(10*dt)
 #x_accel_desired = (x_pos_desired-x_pos)/(100*dt*dt)
 
@@ -41,10 +42,6 @@ x_pos_desired, y_pos_desired = 150, 0
 #y_vel_desired = (y_pos_desired - y)/(10*dt)
 #y_accel_desired = (y_pos_desired-y)/(100*dt*dt)
 
-#Ux_dcha=[]*N
-#a=[]*N
-
-Kd1, Kp1=1, 0.8
 
 #State space representation: [theta     phi     gamma 
                             #theta_dot phi_dot gamma_dot 
@@ -54,7 +51,7 @@ States= [0]*12
 
 #Desired states representation: [x_pos_d, x_vel_d, x_accel_d, 
                                 # y_pos_d, y_vel_d, y_accel_d, 
-                                # z_pos_d, theta_d, phi_d, psi_d, height_desired]
+                                # theta_d, phi_d, psi_d, height_desired]
 S_desired = [0]*10
 
 
@@ -63,14 +60,14 @@ for j in range(N):
             
     #theta_objective[j]=0.2
     
-    x_vel_desired = (x_pos_desired - States[6])/(50*dt)
-    x_accel_desired = (x_pos_desired - States[6])/(100*dt*dt)
-    y_vel_desired = (y_pos_desired - States[7])/(50*dt)
-    y_accel_desired = (y_pos_desired - States[7])/(100*dt*dt)
+    x_vel_desired = (x_pos_desired[j] - States[6])/(50*dt)
+    x_accel_desired = (x_pos_desired[j] - States[6])/(100*dt*dt)
+    y_vel_desired = (y_pos_desired[j] - States[7])/(50*dt)
+    y_accel_desired = (y_pos_desired[j] - States[7])/(100*dt*dt)
 
 
 
-    S_desired[0], S_desired[1], S_desired[2] = x_pos_desired,x_vel_desired,x_accel_desired
+    S_desired[0], S_desired[1], S_desired[2] = x_pos_desired[j],x_vel_desired,x_accel_desired
     
     #ANGLE OBJECTIVE
     #Theta
@@ -90,20 +87,13 @@ for j in range(N):
                 
 
     #OBTAINTION OF FUZZY Kp-Kd
-    Kxp1,Kxd1 = OuterLoopAdaptiveController(S_desired[5],States[0],Kxp1,Kxd1) #X Address
+    Kxp1,Kxd1 = OuterLoopAdaptiveController(S_desired[6],States[0],Kxp1,Kxd1) #X Address
     #Kyp,Kyd = (S_desired[6],States[1],Kyp,Kyd) #Y Address
 
     #OBTAINTION OF X_POS AND X_VEL
     States[9],States[6]= EulerIntegration(x_accel,States[9],States[6])
-    plt.plot(j,States[6],'or') #graphic of x_pos vs time [j = =0.1s]
-plt.show()
+    #plt.plot(j,States[6],'or')
+    plt.plot(j,States[0],'ob')
 
-"""
-    plt.subplot(3, 1, 1)
-    plt.plot(j,x_accel[j],'or') #plot of the drone height vs time
-    plt.subplot(3,1,2)
-    plt.plot(j,x_vel[j],'ob')
-    plt.subplot(3,1,3)
-    plt.plot(j,x_pos[j],'og')
-    plt.pause(0.1)
-plt.show()"""
+    #plt.plot(j,States[9],'or') #graphic of x_pos vs time [j = =0.1s]
+plt.show()
