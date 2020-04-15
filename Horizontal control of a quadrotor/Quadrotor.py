@@ -17,23 +17,13 @@ def angle_objective(desired_states, pos, vel, angle, Thrust, Kp_fuzzy,Kd_fuzzy):
     U=desired_states[2] + Kd_fuzzy*(int(desired_states[1]) - vel) + Kp_fuzzy*(int(desired_states[0])-pos)
     a=U*m/(Thrust*math.cos(angle))
     #chapuza
-    if a>0.4:
-        a=0.47
-    elif a<-0.4:
-        a=-0.4
+    if a>0.6:
+        a=0.6
+    elif a<-0.6:
+        a=-0.6
         
     angle_objective=math.asin(a)
     return angle_objective
-"""
-    Ux_dcha=x_accel_desired + Kxd1*(x_vel_desired - x_vel[j-1]) + Kxp1*(x_pos_desired-x_pos[j-1])
-    a=Ux_dcha*m/(Thrust[j-1]*math.cos(theta[j-1]))
-    #chapuza
-    if a>0.7:
-        a=0.7
-    elif a<-0.7:
-        a=-0.7
-        
-    theta_objective[j]=math.asin(a)"""
 
 
 
@@ -109,20 +99,7 @@ def OuterLoopAdaptiveController(angle_objective, angle, Kp_fuzzy, Kd_fuzzy):
 
     return Kp_fuzzy,Kd_fuzzy
 
-    """P_ex= (theta_objective[j]-theta[j])/(theta_objective[j])*100
-    if (abs(P_ex)> 1 and abs(P_ex)<=3):
-        mu=0.5*P_ex-0.5
-        Kxd1=abs(Kxd1 + 0.5*mu*(theta_objective[j]-theta[j]))
-    elif (abs(P_ex)>3 and abs(P_ex)<=5):
-        mu=-0.5*P_ex+2.5
-        Kxd1=abs(Kxd1 + 0.5*mu*(theta_objective[j]-theta[j]))
-    elif (abs(P_ex)>4 and abs(P_ex)<=6.5):
-        mu=(P_ex-4)/2.5
-        Kxp1=abs(Kxp1 + 0.5*mu*(theta_objective[j]-theta[j]))
-    elif (abs(P_ex)>6.5 and abs(P_ex)<=9):
-        mu=(9-P_ex)/2.5
-        Kxp1=abs(Kxp1 + 0.5*mu*(theta_objective[j]-theta[j]))"""
-
+  
 
 
 def EulerIntegration(accel, vel, pos):
@@ -131,3 +108,4 @@ def EulerIntegration(accel, vel, pos):
     pos_new = pos+ vel_new/2*dt
 
     return vel_new, pos_new
+
