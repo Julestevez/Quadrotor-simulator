@@ -17,13 +17,14 @@ def angle_objective(desired_states, pos, vel, angle, Thrust, Kp_fuzzy,Kd_fuzzy):
     U=desired_states[2] + Kd_fuzzy*(int(desired_states[1]) - vel) + Kp_fuzzy*(int(desired_states[0])-pos)
     a=U*m/(Thrust*math.cos(angle))
     #chapuza
-    if a>0.6:
-        a=0.6
-    elif a<-0.6:
-        a=-0.6
+    if a>0.7:
+        a=0.7
+    elif a<-0.7:
+        a=-0.7
         
     angle_objective=math.asin(a)
     return angle_objective
+
 
 
 
@@ -50,8 +51,8 @@ def quadrotor(States, desired_states, Thrust):
     #PID Controller. Height error = 0
     err_height=desired_states[3]-States[8]
     Torque[0]=err_height*Kp + err_height*Ki*dt - States[8]*Kd*dt + (m*g)/(math.cos(States[1])*math.cos(States[0])) 
-    if Torque[0]>6:
-        Torque[0]=6
+    if Torque[0]>8:
+        Torque[0]=8
     elif Torque[0]<3:
         Torque[0]=3
       
@@ -72,12 +73,9 @@ def quadrotor(States, desired_states, Thrust):
     z_accel= -g + (math.cos(theta)*math.cos(phi))*Torque[0]/m
     x_accel=(math.sin(psi)*math.sin(phi)+math.cos(psi)*math.sin(theta)*math.cos(phi))*Torque[0]/m
 
-
-
     results= [theta, phi, psi, theta_vel, phi_vel, psi_vel]
 
     return results, Torque[0], z_accel, x_accel
-
 
 
 
@@ -100,8 +98,7 @@ def OuterLoopAdaptiveController(angle_objective, angle, Kp_fuzzy, Kd_fuzzy):
     return Kp_fuzzy,Kd_fuzzy
 
   
-
-
+    
 def EulerIntegration(accel, vel, pos):
     vel_new = vel + accel/2*dt
      
