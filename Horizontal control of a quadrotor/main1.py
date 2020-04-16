@@ -1,4 +1,5 @@
 #main file
+
 #This code represents the control of a single quadrotor in a horizontal motion in X-Y directions
 
 import numpy as np
@@ -23,24 +24,20 @@ g=9.80
 
 
 #inicialization of variables
-N=200
-Torque=[0]*4
+N=300
 Thrust=5
 dt=0.1
 
 Kxd1, Kxp1 = 0.76, 0.22
 Kyd1, Kyp1 = 0.76, 0.22
-Kp, Ki, Kd = 4.05, 0, 20.64
-#x_pos_desired = np.linspace(0,200,N) 
-x_pos_desired = [100]*N
-x_pos_desired[0:180] = np.linspace(0,100,180)
-y_pos_desired = [0]*N
-#x_vel_desired = (x_pos_desired - x_pos)/(10*dt)
-#x_accel_desired = (x_pos_desired-x_pos)/(100*dt*dt)
 
-#y_pos_desired = 0
-#y_vel_desired = (y_pos_desired - y)/(10*dt)
-#y_accel_desired = (y_pos_desired-y)/(100*dt*dt)
+#x_pos_desired = np.linspace(0,200,N)
+final_x_coordinate=150 
+x_pos_desired = [final_x_coordinate]*N
+x_pos_desired[0:150] = np.linspace(0,final_x_coordinate,150)
+#x_pos_desired = np.linspace(0,final_x_coordinate,N)
+
+y_pos_desired = [0]*N
 
 
 #State space representation: [theta     phi     gamma 
@@ -61,9 +58,10 @@ for j in range(N):
     #theta_objective[j]=0.2
     
     x_vel_desired = (x_pos_desired[j] - States[6])/(50*dt)
-    x_accel_desired = (x_pos_desired[j] - States[6])/(100*dt*dt)
+    #x_accel_desired = (x_vel_desired - States[9])/(100*dt*dt)
+    x_accel_desired = 0
     y_vel_desired = (y_pos_desired[j] - States[7])/(50*dt)
-    y_accel_desired = (y_pos_desired[j] - States[7])/(100*dt*dt)
+    y_accel_desired = (y_vel_desired - States[10])/(100*dt*dt)
 
 
 
@@ -75,6 +73,9 @@ for j in range(N):
     
     #Phi
     #S_desired[7] = angle_objective(S_desired[3:7],States[7],States[10],States[1],Thrust[j-1],Kyp1,Kyd1)
+    if (j>50 and abs(States[6]-final_x_coordinate)<5 and States[9]<0.5 and States[9]>-0.5):
+        S_desired[6]=0
+        break #finish the programm if it reaches to desired pos with approx 0 velocity
     
     #DRONE height position, velocity and acceleration
     #OBTAINING OF THE STATES OF THE QUADROTOR
@@ -92,8 +93,16 @@ for j in range(N):
 
     #OBTAINTION OF X_POS AND X_VEL
     States[9],States[6]= EulerIntegration(x_accel,States[9],States[6])
-    #plt.plot(j,States[6],'or')
-    plt.plot(j,States[0],'ob')
+    
+    plt.subplot(3,1,1)
+    plt.plot(j,States[6],'or')
+    #plt.plot(j,x_vel_desired,'ob')
+    plt.subplot(3,1,3)
+    plt.plot(j,States[6],'og')
+    #plt.plot(j,x_accel_desired,'or')
+    plt.subplot(3,1,1)
+    plt.plot(j,x_accel,'or')
+    #plt.plot(j,x_pos_desired[j],'or')
 
     #plt.plot(j,States[9],'or') #graphic of x_pos vs time [j = =0.1s]
 plt.show()
