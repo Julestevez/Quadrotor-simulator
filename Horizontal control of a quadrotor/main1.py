@@ -55,8 +55,6 @@ S_desired = [0]*10
 
 for j in range(N):
             
-    #theta_objective[j]=0.2
-    
     x_vel_desired = (x_pos_desired[j] - States[6])/(50*dt)
     #x_accel_desired = (x_vel_desired - States[9])/(100*dt*dt)
     x_accel_desired = 0
@@ -78,7 +76,7 @@ for j in range(N):
         break #finish the programm if it reaches to desired pos with approx 0 velocity
     
     #DRONE height position, velocity and acceleration
-    #OBTAINING OF THE STATES OF THE QUADROTOR
+    #CALCULUS OF THE STATES OF THE QUADROTOR
     States[0:6], Thrust_calc, z_accel, x_accel= quadrotor(States,S_desired[6:11],Thrust)
     
     if Thrust_calc-Thrust>0.05:
@@ -87,11 +85,11 @@ for j in range(N):
         Thrust=Thrust_calc-0.05
                 
 
-    #OBTAINTION OF FUZZY Kp-Kd
+    #CALCULUS OF FUZZY Kp-Kd
     Kxp1,Kxd1 = OuterLoopAdaptiveController(S_desired[6],States[0],Kxp1,Kxd1) #X Address
     #Kyp,Kyd = (S_desired[6],States[1],Kyp,Kyd) #Y Address
 
-    #OBTAINTION OF X_POS AND X_VEL
+    #CALCULUS OF X_POS AND X_VEL
     States[9],States[6]= EulerIntegration(x_accel,States[9],States[6])
     
     plt.subplot(3,1,1)
