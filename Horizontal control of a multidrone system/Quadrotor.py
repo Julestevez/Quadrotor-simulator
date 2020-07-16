@@ -1,3 +1,5 @@
+#QUADROTOR FUNCTIONS
+
 import math
 import numpy as np
 
@@ -81,12 +83,13 @@ def quadrotor(States, desired_states, Thrust):
     
     z_accel= -g + (math.cos(theta)*math.cos(phi))*Torque[0]/m
     x_accel=(math.sin(psi)*math.sin(phi)+math.cos(psi)*math.sin(theta)*math.cos(phi))*Torque[0]/m
+    y_accel=(math.cos(phi)*math.sin(theta)*math.sin(psi)+math.sin(phi)*math.cos(psi))*Torque[0]/m
 
 
 
     results= [theta, phi, psi, theta_vel, phi_vel, psi_vel]
 
-    return results, Torque[0], z_accel, x_accel
+    return results, Torque[0], z_accel, x_accel, y_accel
 
 
 
@@ -146,18 +149,5 @@ def Follower(States,Old_states):
     landaX=60*0.85*math.cos(alfa)
     landaY=60*0.85*math.sin(alfa)
     x_pos_desired=States[0] + landaX*math.cos(beta) - landaY*math.sin(beta)
-    y_pos_desired=States[0] + landaY*math.cos(beta) + landaY*math.sin(beta)
-    
-    """
-    beta1=math.atan((y_pos_dcha(j)-y_pos_dcha(j-1))/(x_pos_dcha(j)-x_pos_dcha(j-1)))
-    
-    landaX=105*0.85*cos(alfa1)
-    landaY=105*0.85*sin(alfa1)
-    x_pos_desired=x_pos_dcha(j)+landaX*math.cos(beta1)-landaY*math.sin(beta1)
-    y_pos_desired=y_pos_dcha(j)+landaX*math.sin(beta1)+landaY*math.sin(beta1)
-    
-    x_vel_desired=(x_deseado2-x_actual2)/(10*dt)
-    x_acel_desired=(x_deseado2-x_actual2)/(100*dt*dt)
-    y_vel_desired=(y_deseado2-y_actual2)/(10*dt)
-    y_acel_desired=(y_deseado2-y_actual2)/(100*dt*dt)"""
+    y_pos_desired=States[1] - landaX*math.sin(beta) - landaY*math.cos(beta) 
     return x_pos_desired,y_pos_desired
