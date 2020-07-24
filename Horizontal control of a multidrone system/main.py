@@ -27,28 +27,26 @@ g=9.80
 
 #inicialization of variables
 N=300
-Thrust, Thrust2 =5, 5
-
-dt=0.1
+Thrust1, Thrust2 =5, 5
 
 Kxd1, Kxp1 = 0.76, 0.22
 Kyd1, Kyp1 = 0.76, 0.22
 Kxd2, Kxp2 = 0.76, 0.22
 Kyd2, Kyp2 = 0.76, 0.22
 
-#x_pos_desired = np.linspace(0,200,N)
+dt=0.1
+
+
+#FINAL COORDINATES TO REACH
 final_x_coordinate=150
 final_y_coordinate=80 
-x_pos_desired = [final_x_coordinate]*N
-x_pos_desired[0:150] = np.linspace(0,final_x_coordinate,150)
-#x_pos_desired = np.linspace(0,final_x_coordinate,N)
-#x_vel_desired = (x_pos_desired - x_pos)/(10*dt)
-#x_accel_desired = (x_pos_desired-x_pos)/(100*dt*dt)
 
-y_pos_desired = [final_y_coordinate]*N
-y_pos_desired[0:150] = np.linspace(0,final_y_coordinate,150)
-#y_vel_desired = (y_pos_desired - y)/(10*dt)
-#y_accel_desired = (y_pos_desired-y)/(100*dt*dt)
+#DISCRETIZED VARIABLES OF DESIRED VALUES FOR DRONE_LEADER
+x_pos_desired1 = [final_x_coordinate]*N
+x_pos_desired1[0:150] = np.linspace(0,final_x_coordinate,150)
+
+y_pos_desired1 = [final_y_coordinate]*N
+y_pos_desired1[0:150] = np.linspace(0,final_y_coordinate,150)
 
 
 #State space representation: [theta     phi     gamma 
@@ -56,7 +54,7 @@ y_pos_desired[0:150] = np.linspace(0,final_y_coordinate,150)
                             # x         y        z 
                             # x_dot     y_dot   z_dot]
 
-States=  [0]*12 #States of the Quaddrotor1
+States1=  [0]*12 #States of the Quaddrotor1
 States2= [0]*12 #States of the Quadrotor2
 
 States2[6]=-50 #starting position
@@ -64,65 +62,62 @@ States2[7]=-60
 #Desired states representation: [x_pos_d, x_vel_d, x_accel_d, 
                                 # y_pos_d, y_vel_d, y_accel_d, 
                                 # theta_d, phi_d, psi_d, height_desired]
-S_desired = [0]*10
+S_desired1 = [0]*10
 S_desired2= [0]*10
 
 fig = plt.figure()
 ax = fig.gca(projection='3d') 
 for j in range(N):
             
-    Old_States=States[5:7] #temporary function
+    Old_States=States1[5:7] #temporary function
     
-    x_vel_desired = (x_pos_desired[j] - States[6])/(50*dt)
-    x_accel_desired = (x_vel_desired - States[9])/(100*dt*dt)
-    x_accel_desired = 0
-    y_vel_desired = (y_pos_desired[j] - States[7])/(50*dt)
-    y_accel_desired = 0
+    x_vel_desired1   = (x_pos_desired1[j] - States1[6])/(50*dt)
+    x_accel_desired1 = (x_vel_desired1 - States1[9])/(100*dt*dt)
+    x_accel_desired1 = 0
+    y_vel_desired1   = (y_pos_desired1[j] - States1[7])/(50*dt)
+    y_accel_desired1 = 0
 
 
     #Assign desired position, speed and velocity in X axis
-    S_desired[0], S_desired[1], S_desired[2] = x_pos_desired[j],x_vel_desired,x_accel_desired
+    S_desired1[0], S_desired1[1], S_desired1[2] = x_pos_desired1[j],x_vel_desired1,x_accel_desired1
 
     #Assign desired position, speed and velocity in Y axis
-    S_desired[3], S_desired[4], S_desired[5] = y_pos_desired[j],y_vel_desired,y_accel_desired
+    S_desired1[3], S_desired1[4], S_desired1[5] = y_pos_desired1[j],y_vel_desired1,y_accel_desired1
     
     #OBJECTIVE ANGLES
     #Theta
-    S_desired[6] = angle_objective(S_desired[0:3],States[6],States[9],States[0],Thrust,Kxp1,Kxd1)
+    S_desired1[6] = angle_objective(S_desired1[0:3],States1[6],States1[9],States1[0],Thrust1,Kxp1,Kxd1)
     
     #Phi
-    S_desired[7] = angle_objective(S_desired[3:7],States[7],States[10],States[1],Thrust,Kyp1,Kyd1)
-    if (j>50 and abs(States[6]-final_x_coordinate)<5 and States[9]<0.5 and States[9]>-0.5):
-        S_desired[6]=0
+    S_desired1[7] = angle_objective(S_desired1[3:7],States1[7],States1[10],States1[1],Thrust1,Kyp1,Kyd1)
+    if (j>50 and abs(States1[6]-final_x_coordinate)<5 and States1[9]<0.5 and States1[9]>-0.5):
+        S_desired1[6]=0
         break
     
     #DRONE height position, velocity and acceleration
     #OBTAINING OF THE STATES OF THE QUADROTOR
-    States[0:6], Thrust_calc, z_accel, x_accel, y_accel= quadrotor(States,S_desired[6:11],Thrust)
+    States1[0:6], Thrust_calc1, z_accel1, x_accel1, y_accel1= quadrotor(States1,S_desired1[6:11],Thrust1)
     
-    
-    if Thrust_calc-Thrust>0.05:
-        Thrust=Thrust_calc+0.05
-    elif Thrust-Thrust_calc>0.05:
-        Thrust=Thrust_calc-0.05
+    if Thrust_calc1-Thrust1>0.05:
+        Thrust1=Thrust_calc1+0.05
+    elif Thrust1-Thrust_calc1>0.05:
+        Thrust1=Thrust_calc1-0.05
                 
 
     #OBTAINTION OF FUZZY Kp-Kd
-    Kxp1,Kxd1 = OuterLoopAdaptiveController(S_desired[6],States[0],Kxp1,Kxd1) #X Address
-    Kyp1,Kyd1 = OuterLoopAdaptiveController(S_desired[7],States[1],Kyp1,Kyd1) #Y Address
+    Kxp1,Kxd1 = OuterLoopAdaptiveController(S_desired1[6],States1[0],Kxp1,Kxd1) #X Address
+    Kyp1,Kyd1 = OuterLoopAdaptiveController(S_desired1[7],States1[1],Kyp1,Kyd1) #Y Address
 
     #OBTAINTION OF POS AND VELOCITY
-    States[9],States[6]= EulerIntegration(x_accel,States[9],States[6]) #X axis
-
-    States[10],States[7]= EulerIntegration(y_accel,States[10],States[7]) #y axis
+    States1[9],States1[6]= EulerIntegration(x_accel1,States1[9],States1[6]) #X axis
+    States1[10],States1[7]= EulerIntegration(y_accel1,States1[10],States1[7]) #y axis
     
 
-    
     
     ###################################################################
     ###################### Follower DRONE #############################
     ###################################################################
-    x_pos_desired2, y_pos_desired2 = Follower(States[6:8],Old_States) #previous drone states as argument
+    x_pos_desired2, y_pos_desired2 = Follower(States1[6:8],Old_States) #previous drone states as argument
     x_vel_desired2 = (x_pos_desired2 - States2[6])/(50*dt)
     x_accel_desired2 = 0
     y_vel_desired2 = (y_pos_desired2 - States2[7])/(50*dt)
@@ -139,15 +134,14 @@ for j in range(N):
     S_desired2[6] = angle_objective(S_desired2[0:3],States2[6],States2[9],States2[0],Thrust2,Kxp2,Kxd2)
     
     #Phi - Y direction
-    S_desired2[7] = angle_objective(S_desired2[3:7],States2[7],States2[10],States[1],Thrust2,Kyp2,Kyd2)
-    if (j>50 and abs(States2[6]-S_desired2[3])<5 and States2[10]<0.5 and States[10]>-0.5):
+    S_desired2[7] = angle_objective(S_desired2[3:7],States2[7],States2[10],States2[1],Thrust2,Kyp2,Kyd2)
+    if (j>50 and abs(States2[6]-S_desired2[3])<5 and States2[10]<0.5 and States2[10]>-0.5):
         S_desired2[7]=0
         break
     
     #DRONE height position, velocity and acceleration
     #OBTAINING OF THE STATES OF THE QUADROTOR
     States2[0:6], Thrust_calc2, z_accel2, x_accel2, y_accel2= quadrotor(States2,S_desired2[6:11],Thrust2)
-    
     
     if Thrust_calc2-Thrust2>0.05:
         Thrust2=Thrust_calc2+0.05
@@ -167,7 +161,7 @@ for j in range(N):
     ###################################################################
     ######################## VISUALIZATION ############################
     ###################################################################
-    VecStart_x,VecStart_y,VecStart_z, VecEnd_x,VecEnd_y,VecEnd_z= Visual3D(States[0],States[1],States[6],States[7],States2[0],States2[1],States2[6],States2[7])
+    VecStart_x,VecStart_y,VecStart_z, VecEnd_x,VecEnd_y,VecEnd_z= Visual3D(States1[0],States1[1],States1[6],States1[7],States2[0],States2[1],States2[6],States2[7])
   
 
     ax.cla()
@@ -180,7 +174,7 @@ for j in range(N):
     for i in range(4):
         ax.plot([VecStart_x[i], VecEnd_x[i]], [VecStart_y[i],VecEnd_y[i]],zs=[VecStart_z[i],VecEnd_z[i]])
     
-    ax.scatter3D(States[6],States[7],50,s=30)
+    ax.scatter3D(States1[6],States1[7],50,s=30)
     ax.scatter3D(States2[6],States2[7],50,s=30)
     #ax.scatter3D(States3[6],States3[7],0)
     #ax.scatter3D(vectorX1,0,z1)
