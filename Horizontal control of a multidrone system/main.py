@@ -12,7 +12,8 @@ from Quadrotor import angle_objective
 from Quadrotor import OuterLoopAdaptiveController
 from Quadrotor import EulerIntegration
 from Quadrotor import Follower
-from Visual3D1 import Visual3D
+from Quadrotor import VelAccelDesired
+from Visual3D import Visual3D
 
 
 #***Dynamic parameters of DRONE****
@@ -24,8 +25,9 @@ m=0.5
 kd=0.25
 g=9.80
 
-
-#inicialization of variables
+###############################################################
+##############inicialization of variables######################
+###############################################################
 N=300
 Thrust1, Thrust2 =5, 5
 
@@ -55,7 +57,7 @@ y_pos_desired1[0:150] = np.linspace(0,final_y_coordinate,150)
                             # x_dot     y_dot   z_dot]
 
 States1=  [0]*12 #States of the Quaddrotor1
-States2= [0]*12 #States of the Quadrotor2
+States2=  [0]*12 #States of the Quadrotor2
 
 States2[6]=-50 #starting position
 States2[7]=-60
@@ -65,18 +67,20 @@ States2[7]=-60
 S_desired1 = [0]*10
 S_desired2= [0]*10
 
+###############################################################
+################# end of initialization ######################
+###############################################################
+
 fig = plt.figure()
 ax = fig.gca(projection='3d') 
 for j in range(N):
             
     Old_States=States1[5:7] #temporary function
     
-    x_vel_desired1   = (x_pos_desired1[j] - States1[6])/(50*dt)
-    x_accel_desired1 = (x_vel_desired1 - States1[9])/(100*dt*dt)
-    x_accel_desired1 = 0
-    y_vel_desired1   = (y_pos_desired1[j] - States1[7])/(50*dt)
-    y_accel_desired1 = 0
-
+    #Calculus of DESIRED vel and accel
+    x_vel_desired1,x_accel_desired1 = VelAccelDesired(x_pos_desired1[j],States1[6])
+    y_vel_desired1,y_accel_desired1 = VelAccelDesired(y_pos_desired1[j],States1[7])
+    
 
     #Assign desired position, speed and velocity in X axis
     S_desired1[0], S_desired1[1], S_desired1[2] = x_pos_desired1[j],x_vel_desired1,x_accel_desired1
@@ -105,27 +109,25 @@ for j in range(N):
         Thrust1=Thrust_calc1-0.05
                 
 
-    #OBTAINTION OF FUZZY Kp-Kd
+    #OBTAINING OF FUZZY Kp-Kd
     Kxp1,Kxd1 = OuterLoopAdaptiveController(S_desired1[6],States1[0],Kxp1,Kxd1) #X Address
     Kyp1,Kyd1 = OuterLoopAdaptiveController(S_desired1[7],States1[1],Kyp1,Kyd1) #Y Address
 
-    #OBTAINTION OF POS AND VELOCITY
+    #OBTAINING OF POS AND VELOCITY
     States1[9],States1[6]= EulerIntegration(x_accel1,States1[9],States1[6]) #X axis
-
     States1[10],States1[7]= EulerIntegration(y_accel1,States1[10],States1[7]) #y axis
     
 
-    
     
     ###################################################################
     ###################### Follower DRONE #############################
     ###################################################################
     x_pos_desired2, y_pos_desired2 = Follower(States1[6:8],Old_States) #previous drone states as argument
-    x_vel_desired2 = (x_pos_desired2 - States2[6])/(50*dt)
-    x_accel_desired2 = 0
-    y_vel_desired2 = (y_pos_desired2 - States2[7])/(50*dt)
-    y_accel_desired2 = 0
-
+    
+    #Calculus of DESIRED vel and accel
+    x_vel_desired2,x_accel_desired2 = VelAccelDesired(x_pos_desired2,States2[6])
+    y_vel_desired2,y_accel_desired2 = VelAccelDesired(y_pos_desired2,States2[7])
+    
     #Assign desired position, speed and velocity in X axis
     S_desired2[0], S_desired2[1], S_desired2[2] = x_pos_desired2,x_vel_desired2,x_accel_desired2
 
