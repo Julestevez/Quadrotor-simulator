@@ -150,4 +150,25 @@ def Follower(States,Old_states):
     landaY=60*0.85*math.sin(alfa)
     x_pos_desired=States[0] + landaX*math.cos(beta) - landaY*math.sin(beta)
     y_pos_desired=States[1] - landaX*math.sin(beta) - landaY*math.cos(beta) 
+
+        
+    """
+    beta1=math.atan((y_pos_dcha(j)-y_pos_dcha(j-1))/(x_pos_dcha(j)-x_pos_dcha(j-1)))
+    
+    landaX=105*0.85*cos(alfa1)
+    landaY=105*0.85*sin(alfa1)
+    x_pos_desired=x_pos_dcha(j)+landaX*math.cos(beta1)-landaY*math.sin(beta1)
+    y_pos_desired=y_pos_dcha(j)+landaX*math.sin(beta1)+landaY*math.sin(beta1)
+    
+    x_vel_desired=(x_deseado2-x_actual2)/(10*dt)
+    x_acel_desired=(x_deseado2-x_actual2)/(100*dt*dt)
+    y_vel_desired=(y_deseado2-y_actual2)/(10*dt)
+    y_acel_desired=(y_deseado2-y_actual2)/(100*dt*dt)"""
     return x_pos_desired,y_pos_desired
+
+def VelAccelDesired(pos_desired,current_coordinates):
+    dt=0.1
+    vel_desired = (pos_desired - current_coordinates)/(50*dt)
+    accel_desired = 0
+    
+    return vel_desired, accel_desired
