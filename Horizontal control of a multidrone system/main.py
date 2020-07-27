@@ -12,7 +12,7 @@ from Quadrotor import angle_objective
 from Quadrotor import OuterLoopAdaptiveController
 from Quadrotor import EulerIntegration
 from Quadrotor import Follower
-from Visual3D import Visual3D
+from Visual3D1 import Visual3D
 
 
 #***Dynamic parameters of DRONE****
@@ -98,6 +98,7 @@ for j in range(N):
     #OBTAINING OF THE STATES OF THE QUADROTOR
     States1[0:6], Thrust_calc1, z_accel1, x_accel1, y_accel1= quadrotor(States1,S_desired1[6:11],Thrust1)
     
+    
     if Thrust_calc1-Thrust1>0.05:
         Thrust1=Thrust_calc1+0.05
     elif Thrust1-Thrust_calc1>0.05:
@@ -110,9 +111,11 @@ for j in range(N):
 
     #OBTAINTION OF POS AND VELOCITY
     States1[9],States1[6]= EulerIntegration(x_accel1,States1[9],States1[6]) #X axis
+
     States1[10],States1[7]= EulerIntegration(y_accel1,States1[10],States1[7]) #y axis
     
 
+    
     
     ###################################################################
     ###################### Follower DRONE #############################
@@ -143,6 +146,7 @@ for j in range(N):
     #OBTAINING OF THE STATES OF THE QUADROTOR
     States2[0:6], Thrust_calc2, z_accel2, x_accel2, y_accel2= quadrotor(States2,S_desired2[6:11],Thrust2)
     
+    
     if Thrust_calc2-Thrust2>0.05:
         Thrust2=Thrust_calc2+0.05
     elif Thrust2-Thrust_calc2>0.05:
@@ -161,7 +165,8 @@ for j in range(N):
     ###################################################################
     ######################## VISUALIZATION ############################
     ###################################################################
-    VecStart_x,VecStart_y,VecStart_z, VecEnd_x,VecEnd_y,VecEnd_z= Visual3D(States1[0],States1[1],States1[6],States1[7],States2[0],States2[1],States2[6],States2[7])
+    VecStart_x1,VecStart_y1,VecStart_z1, VecEnd_x1,VecEnd_y1,VecEnd_z1= Visual3D(States1[0],States1[1],States1[6],States1[7])
+    VecStart_x2,VecStart_y2,VecStart_z2, VecEnd_x2,VecEnd_y2,VecEnd_z2= Visual3D(States2[0],States2[1],States2[6],States2[7])
   
 
     ax.cla()
@@ -171,8 +176,10 @@ for j in range(N):
     ax.set_xlabel('X axis')
     ax.set_ylabel('Y axis')
     ax.set_zlabel('Z axis')
-    for i in range(4):
-        ax.plot([VecStart_x[i], VecEnd_x[i]], [VecStart_y[i],VecEnd_y[i]],zs=[VecStart_z[i],VecEnd_z[i]])
+    for i in range(2):
+        ax.plot([VecStart_x1[i], VecEnd_x1[i]], [VecStart_y1[i],VecEnd_y1[i]],zs=[VecStart_z1[i],VecEnd_z1[i]])
+        ax.plot([VecStart_x2[i], VecEnd_x2[i]], [VecStart_y2[i],VecEnd_y2[i]],zs=[VecStart_z2[i],VecEnd_z2[i]])
+        
     
     ax.scatter3D(States1[6],States1[7],50,s=30)
     ax.scatter3D(States2[6],States2[7],50,s=30)
