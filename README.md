@@ -2,6 +2,7 @@
 - [What is this?](#What-is-this)
 - [Documentation](#Documentation)
 - [How to use](#How-to-use)
+- [Vertical descend of a drone in a two-catenaries configuration](#vertical-descend-of-a-drone-in-a-two-catenaries-configuration)
 
 
 
@@ -16,3 +17,8 @@ If you are interested in other examples or mathematical backgrounds of each algo
 You can check the full documentation [online](https://addi.ehu.es/bitstream/handle/10810/21886/TESIS_ESTEVEZ_SANZ_JULIAN.pdf?sequence=1&isAllowed=y)
 
 # How to use
+1. Download each directory
+2. Execute the main.py file in each of them
+3. Add star to this repo if you like it 😃.
+
+# Vertical descend of a drone in a two-catenaries configuration
