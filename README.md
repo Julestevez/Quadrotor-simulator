@@ -2,11 +2,14 @@
 - [What is this?](#What-is-this)
 - [Documentation](#Documentation)
 - [How to use](#How-to-use)
-Several small projects and code, and a complete quadrotor system simulator for transporting ropes
+
 
 
 # What is this?
-This is a compilation of different simulations of quadrotors for the smooth transportation of deformable linear objects (ropes, cables) developed during my PhD period. Each repository represents a step in the evolution of the PhD till the complete collaborative UAV simulator for cable transportation. Repositories are chronologically ordered.
+A compilation of different simulations of quadrotors for the smooth transportation of 
+deformable linear objects (ropes, cables) developed during my PhD period. Each repository 
+represents a step in the evolution of the PhD till the complete collaborative UAV simulator 
+for cable transportation. Repositories are chronologically ordered.
 
 # Documentation
 If you are interested in other examples or mathematical backgrounds of each algorithm,
