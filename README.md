@@ -23,4 +23,4 @@ You can check the full documentation [online](https://addi.ehu.es/bitstream/hand
 
 # Vertical descend of a drone in a two-catenaries configuration
 
-#Horizontal motion control of a quadrotor
+# Horizontal motion control of a quadrotor
