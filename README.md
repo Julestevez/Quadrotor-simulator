@@ -28,3 +28,4 @@ You can check the full documentation [online](https://addi.ehu.es/bitstream/hand
 # Catenary equiload configuration
 
 # Horizontal motion control of a quadrotor
+![Control of a single UAV in X-Y directions](https://github.com/Julestevez/Quadrotor-simulator/blob/master/Horizontal%20control%20of%20a%20quadrotor/Horizontal%20motion.png)
