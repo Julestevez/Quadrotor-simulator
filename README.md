@@ -21,6 +21,10 @@ You can check the full documentation [online](https://addi.ehu.es/bitstream/hand
 2. Execute the main.py file in each of them
 3. Add star to this repo if you like it 😃.
 
-# Vertical descend of a drone in a two-catenaries configuration
+# List of scripts and simulations
+- [Catenary equiload configuration](#Catenary-equiload-configuration)
+- [Horizontal motion control of a quadrotor](#Horizontal-motion-control-of-a-quadrotor)
+
+# Catenary equiload configuration
 
 # Horizontal motion control of a quadrotor
