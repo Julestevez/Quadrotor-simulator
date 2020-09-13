@@ -22,3 +22,5 @@ You can check the full documentation [online](https://addi.ehu.es/bitstream/hand
 3. Add star to this repo if you like it 😃.
 
 # Vertical descend of a drone in a two-catenaries configuration
+
+#Horizontal motion control of a quadrotor
