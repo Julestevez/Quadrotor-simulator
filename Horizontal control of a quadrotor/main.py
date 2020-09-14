@@ -11,7 +11,10 @@ from Quadrotor import quadrotor
 from Quadrotor import angle_objective
 from Quadrotor import OuterLoopAdaptiveController
 from Quadrotor import EulerIntegration
+from Visual3D import Visual3D
 
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 unused import
+# This import registers the 3D projection, but is otherwise unused.
 
 #***Dynamic parameters of DRONE****
 L=0.25 # [m]
@@ -47,7 +50,9 @@ States= [0]*12
                                 # theta_d, phi_d, psi_d, height_desired]
 S_desired = [0]*10
 
-
+#VISUALIZATION
+fig = plt.figure()
+ax = fig.gca(projection='3d') 
 
 for j in range(N):
             
@@ -83,6 +88,9 @@ for j in range(N):
     States[9],States[6]  = EulerIntegration(x_accel,States[9],States[6])
     States[10],States[7] = EulerIntegration(y_accel,States[10],States[7])
     
+    #########################################################
+    ######## VISUALIZATION 1: kinematic variables ###########
+    ########################################################
     #plot displacement
     plt.subplot(3,2,1)
     plt.title("Variables in X direction")
@@ -114,5 +122,36 @@ for j in range(N):
     plt.ylabel("acceleration [m/s2]")
     plt.xlabel("time [s/10]")
     plt.plot(j,y_accel,'or',markersize=2)
+
+     #########################################################
+    #### End of  VISUALIZATION 1: kinematic variables #########
+    ########################################################
+
+    
+    ###################################################################
+    ############### VISUALIZATION 2: 3D Animation ######################
+    ###################################################################
+    """VecStart_x1,VecStart_y1,VecStart_z1, VecEnd_x1,VecEnd_y1,VecEnd_z1= Visual3D(States[0],States[1],States[6],States[7])
+    
+  
+    ax.cla()
+    ax.set_xlim3d(-20, 80)
+    ax.set_ylim3d(-20,80)
+    ax.set_zlim3d(0,100)
+    ax.set_xlabel('X axis')
+    ax.set_ylabel('Y axis')
+    ax.set_zlabel('Z axis')
+    for i in range(2):
+        ax.plot([VecStart_x1[i], VecEnd_x1[i]], [VecStart_y1[i],VecEnd_y1[i]],zs=[VecStart_z1[i],VecEnd_z1[i]])
+        
+      
+    ax.scatter3D(States[6],States[7],50,s=10)
+    plt.pause(0.1)"""
+
+    ###################################################################
+    ########### End of VISUALIZATION 2: 3D Animation ##################
+    ###################################################################
+    
         
 plt.show()
+
