@@ -2,7 +2,8 @@
 - [What is this?](#What-is-this)
 - [Documentation](#Documentation)
 - [How to use](#How-to-use)
-- [Vertical descend of a drone in a two-catenaries configuration](#vertical-descend-of-a-drone-in-a-two-catenaries-configuration)
+- [List of scripts and simulations](#List-of-scripts-and-simulations)
+  - [Catenary equiload configuration](#Catenary-equiload-configuration)
 
 
 
