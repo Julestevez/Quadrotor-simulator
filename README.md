@@ -2,8 +2,9 @@
 - [What is this?](#What-is-this)
 - [Documentation](#Documentation)
 - [How to use](#How-to-use)
-- [List of scripts and simulations](#List-of-scripts-and-simulations)
+- [List of scripts and simulations]
   - [Catenary equiload configuration](#Catenary-equiload-configuration)
+  - [Horizontal motion control of a quadrotor](#Horizontal-motion-control-of-a-quadrotor)
 
 
 
@@ -22,9 +23,7 @@ You can check the full documentation [online](https://addi.ehu.es/bitstream/hand
 2. Execute the main.py file in each of them
 3. Add star to this repo if you like it 😃.
 
-# List of scripts and simulations
-- [Catenary equiload configuration](#Catenary-equiload-configuration)
-- [Horizontal motion control of a quadrotor](#Horizontal-motion-control-of-a-quadrotor)
+
 
 # Catenary equiload configuration
 Initial catenary (blue) and equiload final configuration (red). UAVs lift the cable from the three nodes appearing in the image with the same vertical load.
@@ -78,4 +77,4 @@ This code is the base for the rest of the repository, as it represents the 2D na
 <br />
 
 
-# next section
+# Horizontal motion of a team of quadrotors
