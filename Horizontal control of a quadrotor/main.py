@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from mpmath import *
 from Quadrotor import quadrotor
 from Quadrotor import angle_objective
-from Quadrotor import OuterLoopAdaptiveController
 from Quadrotor import EulerIntegration
 from Visual3D import Visual3D
 
