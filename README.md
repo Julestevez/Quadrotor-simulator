@@ -31,6 +31,20 @@ Initial catenary (blue) and equiload final configuration (red). UAVs lift the ca
 <img src="https://github.com/Julestevez/Vertical-equiload-of-multi-catenaries/blob/master/equiload_catenary.png" align="left" alt="Equiload configuration of catenaries" width="600"/>
 <br />
 <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 * * *
 
 
