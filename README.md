@@ -49,8 +49,7 @@ Initial catenary (blue) and equiload final configuration (red). UAVs lift the ca
 <br />
 <br />
 <br />
-<br />
-<br />
+
 
 
 
@@ -76,10 +75,6 @@ This code is the base for the rest of the repository, as it represents the 2D na
 <br />
 <br />
 <br />
-<br />
-<br />
-<br />
-<br />
-<br />
+
 
 # next section
