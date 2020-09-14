@@ -2,7 +2,7 @@
 - [What is this?](#What-is-this)
 - [Documentation](#Documentation)
 - [How to use](#How-to-use)
-- [List of scripts and simulations]
+- List of scripts and simulations
   - [Catenary equiload configuration](#Catenary-equiload-configuration)
   - [Horizontal motion control of a quadrotor](#Horizontal-motion-control-of-a-quadrotor)
 
