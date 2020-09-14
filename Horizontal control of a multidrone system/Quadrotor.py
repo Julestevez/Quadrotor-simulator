@@ -4,14 +4,14 @@ import math
 import numpy as np
 
 #***Dynamic parameters of DRONE****
-L=25 
+L=0.25 #[m]
 b = 1e-5 
-I = np.diag([5e-7, 5e-7, 10e-7]) 
+I = np.diag([5e-3, 5e-3, 10e-3])  #[kgm2]
 k=3e-5
-m=0.5
+m=0.5 #[kg]
 kd=0.25
-g=9.80
-dt=0.1
+g=9.80 #[m/s2]
+dt=0.1 #[s]
 
 
 def angle_objective(desired_states, pos, vel, angle, Thrust, Kp_fuzzy,Kd_fuzzy):
@@ -19,23 +19,14 @@ def angle_objective(desired_states, pos, vel, angle, Thrust, Kp_fuzzy,Kd_fuzzy):
     U=desired_states[2] + Kd_fuzzy*(int(desired_states[1]) - vel) + Kp_fuzzy*(int(desired_states[0])-pos)
     a=U*m/(Thrust*math.cos(angle))
     #chapuza
-    if a>0.7:
-        a=0.7
-    elif a<-0.7:
-        a=-0.7
+    if a>0.5:
+        a=0.5
+    elif a<-0.5:
+        a=-0.5
         
     angle_objective=math.asin(a)
     return angle_objective
-"""
-    Ux_dcha=x_accel_desired + Kxd1*(x_vel_desired - x_vel[j-1]) + Kxp1*(x_pos_desired-x_pos[j-1])
-    a=Ux_dcha*m/(Thrust[j-1]*math.cos(theta[j-1]))
-    #chapuza
-    if a>0.7:
-        a=0.7
-    elif a<-0.7:
-        a=-0.7
-        
-    theta_objective[j]=math.asin(a)"""
+
 
 
 
@@ -85,46 +76,10 @@ def quadrotor(States, desired_states, Thrust):
     x_accel=(math.sin(psi)*math.sin(phi)+math.cos(psi)*math.sin(theta)*math.cos(phi))*Torque[0]/m
     y_accel=(math.cos(phi)*math.sin(theta)*math.sin(psi)+math.sin(phi)*math.cos(psi))*Torque[0]/m
 
-
-
     results= [theta, phi, psi, theta_vel, phi_vel, psi_vel]
 
     return results, Torque[0], z_accel, x_accel, y_accel
 
-
-
-
-def OuterLoopAdaptiveController(angle_objective, angle, Kp_fuzzy, Kd_fuzzy):
-
-    P_ex= (angle_objective-angle)/(angle_objective)*100
-    if (abs(P_ex)> 1 and abs(P_ex)<=3):
-        mu=0.5*P_ex-0.5
-        Kd_fuzzy=abs(Kd_fuzzy + 0.5*mu*(angle_objective-angle))
-    elif (abs(P_ex)>3 and abs(P_ex)<=5):
-        mu=-0.5*P_ex+2.5
-        Kd_fuzzy=abs(Kd_fuzzy + 0.5*mu*(angle_objective-angle))
-    elif (abs(P_ex)>4 and abs(P_ex)<=6.5):
-        mu=(P_ex-4)/2.5
-        Kp_fuzzy=abs(Kp_fuzzy + 0.5*mu*(angle_objective-angle))
-    elif (abs(P_ex)>6.5 and abs(P_ex)<=9):
-        mu=(9-P_ex)/2.5
-        Kp_fuzzy=abs(Kp_fuzzy + 0.5*mu*(angle_objective-angle))
-
-    return Kp_fuzzy,Kd_fuzzy
-
-    """P_ex= (theta_objective[j]-theta[j])/(theta_objective[j])*100
-    if (abs(P_ex)> 1 and abs(P_ex)<=3):
-        mu=0.5*P_ex-0.5
-        Kxd1=abs(Kxd1 + 0.5*mu*(theta_objective[j]-theta[j]))
-    elif (abs(P_ex)>3 and abs(P_ex)<=5):
-        mu=-0.5*P_ex+2.5
-        Kxd1=abs(Kxd1 + 0.5*mu*(theta_objective[j]-theta[j]))
-    elif (abs(P_ex)>4 and abs(P_ex)<=6.5):
-        mu=(P_ex-4)/2.5
-        Kxp1=abs(Kxp1 + 0.5*mu*(theta_objective[j]-theta[j]))
-    elif (abs(P_ex)>6.5 and abs(P_ex)<=9):
-        mu=(9-P_ex)/2.5
-        Kxp1=abs(Kxp1 + 0.5*mu*(theta_objective[j]-theta[j]))"""
 
 
 
@@ -152,22 +107,9 @@ def Follower(States,Old_states):
     y_pos_desired=States[1] - landaX*math.sin(beta) - landaY*math.cos(beta) 
 
         
-    """
-    beta1=math.atan((y_pos_dcha(j)-y_pos_dcha(j-1))/(x_pos_dcha(j)-x_pos_dcha(j-1)))
-    
-    landaX=105*0.85*cos(alfa1)
-    landaY=105*0.85*sin(alfa1)
-    x_pos_desired=x_pos_dcha(j)+landaX*math.cos(beta1)-landaY*math.sin(beta1)
-    y_pos_desired=y_pos_dcha(j)+landaX*math.sin(beta1)+landaY*math.sin(beta1)
-    
-    x_vel_desired=(x_deseado2-x_actual2)/(10*dt)
-    x_acel_desired=(x_deseado2-x_actual2)/(100*dt*dt)
-    y_vel_desired=(y_deseado2-y_actual2)/(10*dt)
-    y_acel_desired=(y_deseado2-y_actual2)/(100*dt*dt)"""
     return x_pos_desired,y_pos_desired
 
 def VelAccelDesired(pos_desired,current_coordinates):
-    dt=0.1
     vel_desired = (pos_desired - current_coordinates)/(50*dt)
     accel_desired = 0
     
