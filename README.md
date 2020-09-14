@@ -28,7 +28,7 @@ You can check the full documentation [online](https://addi.ehu.es/bitstream/hand
 # Catenary equiload configuration
 Initial catenary (blue) and equiload final configuration (red). UAVs lift the cable from the three nodes appearing in the image with the same vertical load.
 </br>
-<img src="https://github.com/Julestevez/Vertical-equiload-of-multi-catenaries/blob/master/equiload_catenary.png" align="left" alt="Equiload configuration of catenaries" width="600/>
+<img src="https://github.com/Julestevez/Vertical-equiload-of-multi-catenaries/blob/master/equiload_catenary.png" align="left" alt="Equiload configuration of catenaries" width="600"/>
 
 # Horizontal motion control of a quadrotor
 This code is the base for the rest of the repository, as it represents the 2D navigation of a single UAV.
