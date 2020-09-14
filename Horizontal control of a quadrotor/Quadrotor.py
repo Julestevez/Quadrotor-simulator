@@ -2,14 +2,14 @@ import math
 import numpy as np
 
 #***Dynamic parameters of DRONE****
-L=25 
+L=0.25 # [m]
 b = 1e-5 
-I = np.diag([5e-7, 5e-7, 10e-7]) 
+I = np.diag([5e-3, 5e-3, 10e-3])  # [kgm2]
 k=3e-5
-m=0.5
+m=0.5 #[kg]
 kd=0.25
-g=9.80
-dt=0.1
+g=9.80 #m/s2
+dt=0.1 #s
 
 
 def angle_objective(desired_states, pos, vel, angle, Thrust, Kp_fuzzy,Kd_fuzzy):
@@ -76,26 +76,6 @@ def quadrotor(States, desired_states, Thrust):
     results= [theta, phi, psi, theta_vel, phi_vel, psi_vel]
 
     return results, Torque[0], z_accel, x_accel
-
-
-
-def OuterLoopAdaptiveController(angle_objective, angle, Kp_fuzzy, Kd_fuzzy):
-
-    P_ex= (angle_objective-angle)/(angle_objective)*100
-    if (abs(P_ex)> 1 and abs(P_ex)<=3):
-        mu=0.5*P_ex-0.5
-        Kd_fuzzy=abs(Kd_fuzzy + 0.5*mu*(angle_objective-angle))
-    elif (abs(P_ex)>3 and abs(P_ex)<=5):
-        mu=-0.5*P_ex+2.5
-        Kd_fuzzy=abs(Kd_fuzzy + 0.5*mu*(angle_objective-angle))
-    elif (abs(P_ex)>4 and abs(P_ex)<=6.5):
-        mu=(P_ex-4)/2.5
-        Kp_fuzzy=abs(Kp_fuzzy + 0.5*mu*(angle_objective-angle))
-    elif (abs(P_ex)>6.5 and abs(P_ex)<=9):
-        mu=(9-P_ex)/2.5
-        Kp_fuzzy=abs(Kp_fuzzy + 0.5*mu*(angle_objective-angle))
-
-    return Kp_fuzzy,Kd_fuzzy
 
   
     
