@@ -58,13 +58,11 @@ phi_vel= zeros(1,N); angulotheta_vel= zeros(1,N); psi_vel= zeros(1,N);
 phi_acel= 0; angulotheta_acel= 0; psi_acel= 0;
 
 x_vel2=zeros(1,N); x_pos2=zeros(1,N); x_acel2=zeros(1,N);
-//x_pos2(1)=120; x_pos2(2)=120; x_pos2(3)=120;
-//x_pos2(1)=x_pos_dcha(1)-90; x_pos2(2)=x_pos_dcha(2)-90; x_pos2(3)=x_pos_dcha(3)-90;
+
 x_pos2(1)=x_pos_dcha(1)-60; x_pos2(2)=x_pos_dcha(2)-60; x_pos2(3)=x_pos_dcha(3)-60;
 y_acel2=zeros(1,N); y_vel2=zeros(1,N); y_pos=zeros(1,N);
 y_pos(1)=0; y_pos(2)=0; y_pos(3)=0; 
 z_pos2=zeros(1,N); z_vel2=zeros(1,N); z_acel2=zeros(1,N);
-//z_pos2(1)=-64.5; z_pos2(2)=-64.5; z_pos2(3)=-64.5;
 Thrust=zeros(1,N);
 y_acel=zeros(1,N); y_vel=zeros(1,N);
 //**********************************//
@@ -78,11 +76,8 @@ phi_vel_izq=zeros(1,N); angulotheta_vel_izq=zeros(1,N); psi_vel_izq=zeros(1,N);
 z_vel_izq=zeros(1,N); z_pos_izq=zeros(1,N); 
 z_acel_izq=zeros(1,N); phi_vel_izq=zeros(1,N); angulotheta_vel_izq=zeros(1,N); psi_vel_izq=zeros(1,N); 
 x_acel_izq=zeros(1,N); x_vel_izq=zeros(1,N); x_pos_izq=zeros(1,N); x_vel_izq=zeros(1,N);
-//x_pos_izq(1)=x_pos_dcha(1)-180; x_pos_izq(2)=x_pos_dcha(2)-180; x_pos_izq(3)=x_pos_dcha(3)-180;
 x_pos_izq(1)=x_pos_dcha(1)-120; x_pos_izq(2)=x_pos_dcha(2)-120; x_pos_izq(3)=x_pos_dcha(3)-120;
 y_acel_izq=zeros(1,N); y_vel_izq=zeros(1,N); y_pos_izq=zeros(1,N);
-//y_pos_izq(1)=-226.27; y_pos_izq(2)=-226.27; y_pos_izq(3)=-226.27;
-//y_pos_izq(1)=-210; y_pos_izq(2)=-210; y_pos_izq(3)=-210;//modificar por aquí
 y_pos_izq(1)=0; y_pos_izq(2)=0; y_pos_izq(3)=0;//modificar por aquí
 
 
@@ -94,12 +89,10 @@ phi_vel4= zeros(1,N); angulotheta_vel4= zeros(1,N); psi_vel4= zeros(1,N);
 phi_acel4= 0; angulotheta_acel4= 0; psi_acel4= 0;
 
 x_vel4=zeros(1,N); x_pos4=zeros(1,N); x_acel4=zeros(1,N);
-//x_pos2(1)=120; x_pos2(2)=120; x_pos2(3)=120;
 x_pos4(1)=x_pos_dcha(1)-270; x_pos4(2)=x_pos_dcha(2)-270; x_pos4(3)=x_pos_dcha(3)-270;
 y_acel4=zeros(1,N); y_vel4=zeros(1,N); y_pos4=zeros(1,N);
 y_pos4(1)=165; y_pos4(2)=165; y_pos4(3)=165; 
 z_pos4=zeros(1,N); z_vel4=zeros(1,N); z_acel4=zeros(1,N);
-//z_pos2(1)=-64.5; z_pos2(2)=-64.5; z_pos2(3)=-64.5;
 Thrust4=zeros(1,N);
 
 
@@ -111,24 +104,18 @@ phi_vel5= zeros(1,N); angulotheta_vel5= zeros(1,N); psi_vel5= zeros(1,N);
 phi_acel5= 0; angulotheta_acel5= 0; psi_acel5= 0;
 
 x_vel5=zeros(1,N); x_pos5=zeros(1,N); x_acel5=zeros(1,N);
-//x_pos2(1)=120; x_pos2(2)=120; x_pos2(3)=120;
 x_pos5(1)=x_pos_dcha(1)-360; x_pos5(2)=x_pos_dcha(1)-360; x_pos5(3)=x_pos_dcha(1)-360;
 y_acel5=zeros(1,N); y_vel5=zeros(1,N); y_pos5=zeros(1,N);
 y_pos5(1)=165; y_pos5(2)=165; y_pos5(3)=165; //por pitagoras
 z_pos5=zeros(1,N); z_vel5=zeros(1,N); z_acel5=zeros(1,N);
-//z_pos2(1)=-64.5; z_pos2(2)=-64.5; z_pos2(3)=-64.5;
 Thrust5=zeros(1,N);
 
 
 x_vel_deseado=2; 
 
-
-
  //valores del controlador PID
 Kp=140.6659; Kd=41.36; Ki=0;
 w=0.01;
-
-//Kp=2.008; Kd=4.9687; Ki=0;
 
 xB1=120; xB2=120; xB3=120; xB4=120; //DRONE 3+4
 vectorX1=linspace(0,xB1,150);
@@ -155,13 +142,9 @@ matriz_y3=zeros(20,150);
 
 y2=y2+y1(150);
 [yB2]= descenso(Sab, xB2,w);
-yB2=-64.54; //OBTENIDO CON WOLFRAMALPHA
+yB2=-64.54; //externally calculated
 
 yB1=yB2;
-
-//yB1=-7.5;   EL CONTROLADOR PID SIRVE PARA TODAS LAS ALTURAS, Y TAMBIÉN PARA TODAS LAS MASAS
-//yB2=-7.5;
-
 
 NudoBaja=yB1;
 
@@ -248,7 +231,7 @@ yB3=114;
 //estas variables las he creado para el viento. Tienen que estar inicializadas para la primera iteración
 orient1=%pi/2; orient2=%pi/2; orient3=%pi/2; orient4=%pi/2; orient5=%pi/2;
 
-//theta_objetivo=0.2;   
+
    j=2;
    beta2=%pi/2; beta3=%pi/2;
    while (x_vel_dcha(j) ~= x_vel_deseado)
@@ -271,12 +254,10 @@ orient1=%pi/2; orient2=%pi/2; orient3=%pi/2; orient4=%pi/2; orient5=%pi/2;
        
        //y_deseado=x_deseado-240;         
        x_vel_deseado=(x_deseado-x_actual)/(10*dt);
-       //x_acel_deseado=(x_deseado-x_actual)/(100*dt*dt);
        x_acel_deseado=(x_vel_deseado-x_vel_dcha(j-1))/(100*dt);
        
         //DIRECCIÓN Y
        y_vel_deseado=(y_deseado-y_actual)/(10*dt);
-       //y_acel_deseado=(y_deseado-y_actual)/(100*dt*dt);
        y_acel_deseado=(y_vel_deseado-y_vel_dcha(j-1))/(100*dt);
 
        theta_objetivo(j)=0.2;
@@ -285,8 +266,7 @@ orient1=%pi/2; orient2=%pi/2; orient3=%pi/2; orient4=%pi/2; orient5=%pi/2;
                         
             Ux_dcha(j)=x_acel_deseado + Kxd1*(x_vel_deseado - x_vel_dcha(j-1)) + Kxp1*(x_deseado-x_pos_dcha(j-1));
 //            
-        // a(j)=Ux_dcha(j)*m/(Thrust_dcha(j-1)*cos(angulotheta_dcha(j-1))); así estaba antes
-        a(j)=Ux_dcha(j)*m/(Thrust_dcha(j-1)*cos(phi_dcha(j-1)));
+       a(j)=Ux_dcha(j)*m/(Thrust_dcha(j-1)*cos(phi_dcha(j-1)));
         
          //chapuza
         if (a(j))>angulo_max then
@@ -330,12 +310,11 @@ orient1=%pi/2; orient2=%pi/2; orient3=%pi/2; orient4=%pi/2; orient5=%pi/2;
         [y1,x01,y01,c1] = catenaria3(xB1, -yB1, Sab, vectorX1);
         dist1(j)=xB1;
         [TensV_A, TensV_B1, TensH_A, TensH_B1]= TensVerticales(c1,y01,yB1);
-    //plot(sqrt((x_pos_dcha(j)-x_pos2(j-1))^2 - (y_pos_dcha(j)-y_pos(j-1))^2),'or'); //sirve para ver la distancia real de los hilos
+   
 end
     
     [z_acel_dcha(j), phi_dcha(j), angulotheta_dcha(j), psi_dcha(j), phi_vel_dcha(j), angulotheta_vel_dcha(j), psi_vel_dcha(j), Thrust_dcha(j)] = quadrotor_dcha2(phi_dcha(j-1), angulotheta_dcha(j-1), psi_dcha(j-1), phi_vel_dcha(j-1),phi_vel_dcha(j-2), angulotheta_vel_dcha(j-1),angulotheta_vel_dcha(j-2), psi_vel_dcha(j-1),psi_vel_dcha(j-2), 0, TensV_A, z_vel_dcha(j-1),z_vel_dcha(j-2),z_dcha(j-1), TensH_B1, 0,theta_objetivo(j),phi_objetivo(j-1),Viento,orient1);
     
-//    Thrust_dcha(j)=Thrust_dcha(j)+(sin(orient1)*sin(angulotheta_dcha(j))*cos(phi_dcha(j))-cos(orient1)*sin(phi_dcha(j)))*Viento;
     if abs(Thrust_dcha(j))>20
         Thrust_dcha(j)=20;
     end
