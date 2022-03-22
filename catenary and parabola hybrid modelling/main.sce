@@ -27,10 +27,7 @@ angulotheta_objetivo_izq=zeros(1,100);
 L=25; b = 1e-5; I = diag([0.5, 0.5, 1]); //L esta en centimetros
 k=3e-5; m=0.5; //el momento de inercia está en [N·cm·s2]
 Sab=240;
-//PARROT
-//L=17; b = 3.13e-5; I = diag([86, 86, 172]); //L esta en centimetros
-//k=7.5e-5; m=0.38; 
-//b=[N·cm·s2]  //k=[N·s2]
+
 
 
 N=600; //N= número de elementos
@@ -335,9 +332,6 @@ orient1=%pi/2; orient2=%pi/2; orient3=%pi/2; orient4=%pi/2; orient5=%pi/2;
         [TensV_A, TensV_B1, TensH_A, TensH_B1]= TensVerticales(c1,y01,yB1);
     //plot(sqrt((x_pos_dcha(j)-x_pos2(j-1))^2 - (y_pos_dcha(j)-y_pos(j-1))^2),'or'); //sirve para ver la distancia real de los hilos
 end
-
-        
-   
     
     [z_acel_dcha(j), phi_dcha(j), angulotheta_dcha(j), psi_dcha(j), phi_vel_dcha(j), angulotheta_vel_dcha(j), psi_vel_dcha(j), Thrust_dcha(j)] = quadrotor_dcha2(phi_dcha(j-1), angulotheta_dcha(j-1), psi_dcha(j-1), phi_vel_dcha(j-1),phi_vel_dcha(j-2), angulotheta_vel_dcha(j-1),angulotheta_vel_dcha(j-2), psi_vel_dcha(j-1),psi_vel_dcha(j-2), 0, TensV_A, z_vel_dcha(j-1),z_vel_dcha(j-2),z_dcha(j-1), TensH_B1, 0,theta_objetivo(j),phi_objetivo(j-1),Viento,orient1);
     
@@ -417,8 +411,6 @@ disp(j);
     //*********************************
     //LE SIGUE EL DRON CENTRAL
     
-
-
 //    x_deseado2=x_pos_dcha(j-1)-120; //si pongo x_deseado=x_pos_dcha(j-1)-120 -> el angulo tetha me sale muy irregular
 //    y_deseado2=y_deseado; //esto lo pongo para inicializar
 //nuevo
