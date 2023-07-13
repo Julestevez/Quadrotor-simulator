@@ -51,7 +51,8 @@ S_desired = [0]*10
 
 #VISUALIZATION
 fig = plt.figure()
-ax = fig.gca(projection='3d') 
+# ax = fig.gca(projection='3d') 
+ax = fig.add_subplot  #this is for newest versions of Matplotlib. If this doesn't work, try the expression above
 
 for j in range(N):
             
