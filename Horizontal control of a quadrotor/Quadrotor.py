@@ -72,10 +72,11 @@ def quadrotor(States, desired_states, Thrust):
     
     z_accel= -g + (math.cos(theta)*math.cos(phi))*Torque[0]/m
     x_accel=(math.sin(psi)*math.sin(phi)+math.cos(psi)*math.sin(theta)*math.cos(phi))*Torque[0]/m
+    y_accel=(math.cos(phi)*math.sin(theta)*math.sin(psi)+math.sin(phi)*math.cos(psi))*Torque[0]/m
 
     results= [theta, phi, psi, theta_vel, phi_vel, psi_vel]
 
-    return results, Torque[0], z_accel, x_accel
+    return results, Torque[0], z_accel, x_accel, y_accel
 
   
     
