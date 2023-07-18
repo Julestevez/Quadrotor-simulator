@@ -5,6 +5,7 @@
 - List of scripts and simulations
   - [Catenary equiload configuration](#Catenary-equiload-configuration)
   - [Horizontal motion control of a quadrotor](#Horizontal-motion-control-of-a-quadrotor)
+  - Horizontal motion control of a multidrone system (#Horizontal-motion-of-a-team-of-quadrotors)
 
 
 
@@ -44,10 +45,7 @@ Initial catenary (blue) and equiload final configuration (red). UAVs lift the ca
 <br />
 <br />
 <br />
-<br />
-<br />
-<br />
-<br />
+
 
 
 
