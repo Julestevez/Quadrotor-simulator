@@ -5,6 +5,8 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+import imageio
+from skimage.transform import resize
 
 from mpmath import *
 from Quadrotor import quadrotor
@@ -13,6 +15,7 @@ from Quadrotor import EulerIntegration
 from Quadrotor import Follower
 from Quadrotor import VelAccelDesired
 from Visual3D import Visual3D
+
 
 
 #***Dynamic parameters of DRONE****
@@ -28,7 +31,7 @@ dt=0.1 #[s]
 ###############################################################
 ############## Inicialization of variables ####################
 ###############################################################
-N=300
+N=450
 Thrust1, Thrust2 =5, 5
 
 Kxd1, Kxp1 = 0.76, 0.22
@@ -39,8 +42,8 @@ Kyd2, Kyp2 = 0.76, 0.22
 
 
 #FINAL COORDINATES TO REACH
-final_x_coordinate=40
-final_y_coordinate=30 
+final_x_coordinate=90
+final_y_coordinate=90
 
 
 
@@ -66,11 +69,18 @@ S_desired2 = [0]*10
 
 #VISUALIZATION
 fig = plt.figure() 
-#ax = fig.gca(projection='3d') #this line is only useful for 3d projection, not for ploting graphs
+ax = fig.add_subplot(projection='3d') #this line is only useful for 3d projection, not for ploting graphs
 
 
-for j in range(N):
-            
+# for j in range(N):
+def plot_for_offset(n): ## function to create the animation
+    Thrust1, Thrust2 =5, 5
+
+    Kxd1, Kxp1 = 0.76, 0.22
+    Kyd1, Kyp1 = 0.76, 0.22
+    Kxd2, Kxp2 = 0.76, 0.22
+    Kyd2, Kyp2 = 0.76, 0.22
+
     Old_States=States1[5:7] #temporary variables
     
     #Calculus of DESIRED vel and accel
@@ -92,7 +102,7 @@ for j in range(N):
     
     
     #DRONE height position, velocity and acceleration
-    #OBTAINING OF THE STATES OF THE QUADROTOR
+    #CALCULUS OF THE STATES OF THE QUADROTOR
     States1[0:6], Thrust_calc1, z_accel1, x_accel1, y_accel1= quadrotor(States1,S_desired1[6:11],Thrust1)
     
     
@@ -103,7 +113,7 @@ for j in range(N):
         Thrust1=Thrust_calc1-0.05
                 
 
-    #OBTAINING OF POS AND VELOCITY
+    #CALCULUS OF POS AND VELOCITY
     States1[9],States1[6]= EulerIntegration(x_accel1,States1[9],States1[6]) #X axis
     States1[10],States1[7]= EulerIntegration(y_accel1,States1[10],States1[7]) #y axis
     
@@ -133,7 +143,7 @@ for j in range(N):
     
     
     #DRONE height position, velocity and acceleration
-    #OBTAINING OF THE STATES OF THE QUADROTOR
+    #CALCULUS OF THE STATES OF THE QUADROTOR
     States2[0:6], Thrust_calc2, z_accel2, x_accel2, y_accel2= quadrotor(States2,S_desired2[6:11],Thrust2)
     
     #smoothing of the thrust
@@ -143,21 +153,21 @@ for j in range(N):
         Thrust2=Thrust_calc2-0.05
                 
 
-    #OBTAINTION OF POS and VELOCITY
+    #CALCULUS OF POS and VELOCITY
     States2[9],States2[6]= EulerIntegration(x_accel2,States2[9],States2[6]) #x axis
     States2[10],States2[7]= EulerIntegration(y_accel2,States2[10],States2[7]) #y axis
 
    
-    #########################################################
-    ########## VISUALIZATION 1: 3d projection## ############
-    ########################################################
+    #############################################################################
+    ########## VISUALIZATION 1: 3d projection gif animation saving ##############
+    #############################################################################
     VecStart_x1,VecStart_y1,VecStart_z1, VecEnd_x1,VecEnd_y1,VecEnd_z1= Visual3D(States1[0],States1[1],States1[6],States1[7])
     VecStart_x2,VecStart_y2,VecStart_z2, VecEnd_x2,VecEnd_y2,VecEnd_z2= Visual3D(States2[0],States2[1],States2[6],States2[7])
   
 
-    """ax.cla()
+    ax.cla()
     ax.set_xlim3d(-100, 200)
-    ax.set_ylim3d(-100,100)
+    ax.set_ylim3d(-50,150)
     ax.set_zlim3d(0,100)
     ax.set_xlabel('X axis')
     ax.set_ylabel('Y axis')
@@ -169,8 +179,20 @@ for j in range(N):
     
     ax.scatter3D(States1[6],States1[7],50,s=30)
     ax.scatter3D(States2[6],States2[7],50,s=30)
-    #ax.scatter3D(States3[6],States3[7],0)
-    #ax.scatter3D(vectorX1,0,z1)"""
+
+    fig.canvas.draw()
+
+    img = np.frombuffer(fig.canvas.tostring_rgb(), dtype='uint8')
+    img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+    
+
+    return img
+
+    
+    #*** This is just some code to just visualize the animation, without saving it in a gif.
+    # ax.scatter3D(States3[6],States3[7],0)
+    # ax.scatter3D(vectorX1,0,z1)
+    # plt.pause(0.005)
 
     #########################################################
     ###### End of  VISUALIZATION 1: 3d projection ##########
@@ -180,9 +202,10 @@ for j in range(N):
     ###################################################################
     ######### VISUALIZATION 2: X-Y displacement of 2 drones ###########
     ###################################################################
+    # This 2nd visualization plots some variables of the drones along time. We can choose either the 1st or 2nd visualization of the code.
 
     #plot displacement
-    plt.subplot(2,2,1)
+"""     plt.subplot(2,2,1)
     plt.title("Variables of Drone1")
     plt.plot(j,States1[6],'og',markersize=2)
     plt.ylabel("displacement in X [m]")
@@ -198,10 +221,12 @@ for j in range(N):
 
     plt.subplot(2,2,4)
     plt.plot(j,States2[7],'or',markersize=2)
-    plt.ylabel("displacement in Y [m]")
+    plt.ylabel("displacement in Y [m]") """
 
 
     ###################################################################
     ####### End of VISUALIZATION 2: X-Y displacement of 2 drones ######
     ###################################################################
-plt.show()
+
+imageio.mimsave(r'C:\\drone_animation.gif', [plot_for_offset(n) for n in range(1, 450)], duration=10) #how to save the animation in a gif
+#plt.show()
