@@ -53,7 +53,7 @@ Initial catenary (blue) and equiload final configuration (red). UAVs lift the ca
 
 
 # Horizontal motion control of a quadrotor
-This code is the base for the rest of the repository, as it represents the 2D navigation of a single UAV.
+This code is the base for the rest of the repository, as it represents the 3D navigation of a single UAV.
 <br />
 <img src="https://github.com/Julestevez/Quadrotor-simulator/blob/master/Horizontal%20control%20of%20a%20quadrotor/single%20drone%20animation.gif" align= "left" alt="Control of a single UAV in X-Y directions" width="800"/>
 <br />
@@ -89,3 +89,6 @@ This code is the base for the rest of the repository, as it represents the 2D na
 
 
 # Horizontal motion of a team of quadrotors
+This code of a UAV following another one in X-Y plain.
+<br />
+<img src="https://github.com/Julestevez/Quadrotor-simulator/blob/master/Horizontal%20control%20of%20a%20multidrone%20system/multidrone%20system.gif" align= "left" alt="Control of a multidrone system in X-Y directions" width="800"/>
