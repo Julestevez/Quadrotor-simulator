@@ -5,7 +5,7 @@
 - List of scripts and simulations
   - [Catenary equiload configuration](#Catenary-equiload-configuration)
   - [Horizontal motion control of a quadrotor](#Horizontal-motion-control-of-a-quadrotor)
-  - Horizontal motion control of a multidrone system (#Horizontal-motion-of-a-team-of-quadrotors)
+  - [Horizontal motion control of a multidrone system](#Horizontal-motion-of-a-team-of-quadrotors)
 
 
 
