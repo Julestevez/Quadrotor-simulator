@@ -119,4 +119,4 @@ This code of a UAV following another one in X-Y plain.
 <br />
 <br />
 <br />
-<img src="https://github.com/Julestevez/Quadrotor-simulator/blob/master/Horizontal%20control%20of%20a%20multidrone%20system/multidrone%20system.gif" align= "left" alt="Control of a multidrone system in X-Y directions" width="800"/>
+<img src="https://github.com/Julestevez/Quadrotor-simulator/blob/master/Moving%20catenaries%20in%203D/Catenaries_animation.gif" align= "left" alt="Moving catenaries in 3D" width="800"/>
