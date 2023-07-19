@@ -90,3 +90,33 @@ This code is the base for the rest of the repository, as it represents the 3D na
 This code of a UAV following another one in X-Y plain.
 <br />
 <img src="https://github.com/Julestevez/Quadrotor-simulator/blob/master/Horizontal%20control%20of%20a%20multidrone%20system/multidrone%20system.gif" align= "left" alt="Control of a multidrone system in X-Y directions" width="800"/>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<img src="https://github.com/Julestevez/Quadrotor-simulator/blob/master/Horizontal%20control%20of%20a%20multidrone%20system/multidrone%20system.gif" align= "left" alt="Control of a multidrone system in X-Y directions" width="800"/>
